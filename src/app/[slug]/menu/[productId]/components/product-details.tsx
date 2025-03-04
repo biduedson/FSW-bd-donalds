@@ -6,14 +6,6 @@ import { useContext, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 import { formatCurrency } from "@/helpers/format-currency";
 
 import CartSheet from "../../components/cart-sheet";
@@ -33,7 +25,7 @@ interface ProductDetailsProps {
 }
 
 const ProductsDetails = ({ product }: ProductDetailsProps) => {
-  const { toggleCart } = useContext(CartContext);
+  const { toggleCart, addProduct } = useContext(CartContext);
   const [quantity, setQuantity] = useState<number>(1);
   const [productPrice, setproductPrice] = useState<number>(product.price);
   const handleDecreaseQuantity = () => {
@@ -45,6 +37,14 @@ const ProductsDetails = ({ product }: ProductDetailsProps) => {
   const handleIncreaseQuantity = () => {
     setQuantity((prev) => prev + 1);
     setproductPrice((prev) => (prev += product.price));
+  };
+
+  const handleAddToCart = () => {
+    addProduct({
+      ...product,
+      quantity,
+    });
+    toggleCart();
   };
 
   return (
@@ -115,7 +115,7 @@ const ProductsDetails = ({ product }: ProductDetailsProps) => {
             </div>
           </ScrollArea>
         </div>
-        <Button className="w-full rounded-full" onClick={toggleCart}>
+        <Button className="w-full rounded-full" onClick={handleAddToCart}>
           Adicionar à sacola
         </Button>
       </div>
