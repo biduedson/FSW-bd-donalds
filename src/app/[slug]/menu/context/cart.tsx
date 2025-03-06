@@ -5,7 +5,7 @@ import { createContext, ReactNode, useState } from "react";
 
 // Define a interface para os produtos do carrinho
 // Ela herda os campos "id", "name", "price" e "imageUrl" do modelo Product do Prisma
-interface CartProduc
+export interface CartProduc
   extends Pick<Product, "id" | "name" | "price" | "imageUrl"> {
   quantity: number; // Adiciona um campo extra "quantity" para controlar a quantidade do produto no carrinho
 }
