@@ -16,6 +16,8 @@ export interface ICartContext {
   products: CartProduc[]; // Lista de produtos no carrinho
   toggleCart: () => void; // Função para abrir/fechar o carrinho
   addProduct: (product: CartProduc) => void; // Função para adicionar um produto ao carrinho
+  decreaseProductQuantity: (productId: string) => void;
+  increaseProductQuantity: () => void;
 }
 
 // Cria o contexto do carrinho com valores iniciais padrão
@@ -24,6 +26,8 @@ export const CartContext = createContext<ICartContext>({
   products: [], // Lista inicial de produtos vazia
   toggleCart: () => {}, // Função vazia como placeholder
   addProduct: () => {}, // Função vazia como placeholder
+  decreaseProductQuantity: () => {},
+  increaseProductQuantity: () => {},
 });
 
 // Componente que fornece o contexto do carrinho para toda a aplicação
@@ -61,7 +65,27 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       });
     });
   };
+  const increaseProductQuantity = () => {
+    setProducts((prevProducts) => {
+      return prevProducts.map((prevProduct) => {
+        return { ...prevProduct, quantity: prevProduct.quantity + 1 };
+      });
+    });
+  };
+  const decreaseProductQuantity = (productId: string) => {
+    setProducts((prevProducts) => {
+      return prevProducts.map((prevProduct) => {
+        if (prevProduct.id !== productId) {
+          return prevProduct;
+        }
 
+        if (prevProduct.quantity === 1) {
+          return prevProduct;
+        }
+        return { ...prevProduct, quantity: prevProduct.quantity - 1 };
+      });
+    });
+  };
   return (
     // Provedor do contexto que disponibiliza o estado e as funções do carrinho para os componentes filhos
     <CartContext.Provider
@@ -70,6 +94,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         products,
         toggleCart,
         addProduct,
+        decreaseProductQuantity,
+        increaseProductQuantity,
       }}
     >
       {children} {/* Renderiza os componentes filhos dentro do contexto */}
