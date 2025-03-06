@@ -17,7 +17,7 @@ export interface ICartContext {
   toggleCart: () => void; // Função para abrir/fechar o carrinho
   addProduct: (product: CartProduc) => void; // Função para adicionar um produto ao carrinho
   decreaseProductQuantity: (productId: string) => void;
-  increaseProductQuantity: () => void;
+  increaseProductQuantity: (productId: string) => void;
 }
 
 // Cria o contexto do carrinho com valores iniciais padrão
@@ -65,9 +65,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       });
     });
   };
-  const increaseProductQuantity = () => {
+  const increaseProductQuantity = (productId: string) => {
     setProducts((prevProducts) => {
       return prevProducts.map((prevProduct) => {
+        if (prevProduct.id !== productId) {
+          return prevProduct;
+        }
         return { ...prevProduct, quantity: prevProduct.quantity + 1 };
       });
     });

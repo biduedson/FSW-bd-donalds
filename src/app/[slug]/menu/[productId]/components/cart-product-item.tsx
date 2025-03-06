@@ -41,7 +41,7 @@ const CartProductItem = ({ product }: CartItemProps) => {
             <Button
               className="h-7 w-7 rounded-lg"
               variant="destructive"
-              onClick={increaseProductQuantity}
+              onClick={() => increaseProductQuantity(product.id)}
             >
               <ChevronRightIcon size={14} />
             </Button>
