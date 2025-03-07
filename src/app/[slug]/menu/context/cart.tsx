@@ -18,6 +18,7 @@ export interface ICartContext {
   addProduct: (product: CartProduc) => void; // Função para adicionar um produto ao carrinho
   decreaseProductQuantity: (productId: string) => void;
   increaseProductQuantity: (productId: string) => void;
+  removeProduct: (productId: string) => void;
 }
 
 // Cria o contexto do carrinho com valores iniciais padrão
@@ -28,6 +29,7 @@ export const CartContext = createContext<ICartContext>({
   addProduct: () => {}, // Função vazia como placeholder
   decreaseProductQuantity: () => {},
   increaseProductQuantity: () => {},
+  removeProduct: () => {},
 });
 
 // Componente que fornece o contexto do carrinho para toda a aplicação
@@ -75,6 +77,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       });
     });
   };
+
   const decreaseProductQuantity = (productId: string) => {
     setProducts((prevProducts) => {
       return prevProducts.map((prevProduct) => {
@@ -89,6 +92,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       });
     });
   };
+
+  const removeProduct = (productId: string) => {
+    setProducts((prevProducts) =>
+      prevProducts.filter((prevProduct) => prevProduct.id !== productId),
+    );
+  };
   return (
     // Provedor do contexto que disponibiliza o estado e as funções do carrinho para os componentes filhos
     <CartContext.Provider
@@ -99,6 +108,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         addProduct,
         decreaseProductQuantity,
         increaseProductQuantity,
+        removeProduct,
       }}
     >
       {children} {/* Renderiza os componentes filhos dentro do contexto */}
