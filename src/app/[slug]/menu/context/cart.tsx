@@ -19,6 +19,7 @@ export interface ICartContext {
   decreaseProductQuantity: (productId: string) => void;
   increaseProductQuantity: (productId: string) => void;
   removeProduct: (productId: string) => void;
+  total: number;
 }
 
 // Cria o contexto do carrinho com valores iniciais padrão
@@ -30,6 +31,7 @@ export const CartContext = createContext<ICartContext>({
   decreaseProductQuantity: () => {},
   increaseProductQuantity: () => {},
   removeProduct: () => {},
+  total: 0,
 });
 
 // Componente que fornece o contexto do carrinho para toda a aplicação
@@ -37,6 +39,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [products, setProducts] = useState<CartProduc[]>([]); // Estado que armazena os produtos do carrinho
   const [isOpen, setIsOpen] = useState<boolean>(false); // Estado que controla se o carrinho está aberto
 
+  const total = products.reduce((acc, product) => {
+    return acc + product.price * product.quantity;
+  }, 0);
   // Função para alternar a visibilidade do carrinho
   const toggleCart = () => {
     setIsOpen((prev) => !prev); // Inverte o estado atual
@@ -109,6 +114,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         decreaseProductQuantity,
         increaseProductQuantity,
         removeProduct,
+        total,
       }}
     >
       {children} {/* Renderiza os componentes filhos dentro do contexto */}
